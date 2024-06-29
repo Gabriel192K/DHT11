@@ -15,6 +15,7 @@ DHT11 dht11(&dhtGPIO);
 void setup(void)
 {
     Serial.begin(115200);
+    Serial.print(F("\t-- DHT11 Reading Temperature & Humidity--\n"))
     dht11.begin();
 }
 
@@ -27,9 +28,7 @@ void loop(void)
 
     const float temperature = dht11.getTemperature();
     const float humidity = dht11.getHumidity();
-    Serial.print(F("Temperature: "));
-    Serial.println(temperature);
-    Serial.print(F("Humidity: "));
-    Serial.println(humidity);
+    Serial.print(F("Temperature: ")); Serial.print(temperature); Serial.print(F(" *C\n"));
+    Serial.print(F("Humidity   : ")); Serial.print(humidity); Serial.print(F(" %\n"));
     nextTime = millis() + 1000;
 }
