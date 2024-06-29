@@ -23,8 +23,8 @@ DHT11::~DHT11()
  */
 void DHT11::begin(void)
 {
+    beginTime();
     this->state = REQUEST_LOW;
-    
 }
 
 /*!

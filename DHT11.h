@@ -10,8 +10,10 @@
 #endif
 
 #if defined(ARDUINO)
+#define beginTime()       0
 #define getMicroseconds() micros()
 #else // Microchip Studio
+#define beginTime()       Time.begin()
 #define getMicroseconds() Time.microseconds()
 #endif
 #define WAIT_LOW_INTERVAL   (const uint32_t)18000   // in microseconds
