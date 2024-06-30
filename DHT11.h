@@ -16,24 +16,25 @@
 #define beginTime()       Time.begin()
 #define getMicroseconds() Time.microseconds()
 #endif
-#define WAIT_LOW_INTERVAL   (const uint32_t)18000   // in microseconds
-#define WAIT_20_US_INTERVAL (const uint32_t)20      // in microseconds
-#define WAIT_30_US_INTERVAL (const uint32_t)30      // in microseconds
-#define WAIT_NEXT_PACKET_US (const uint32_t)2000000 // in microseconds
+
+#define DHT11_WAIT_LOW_INTERVAL   (const uint32_t)18000   // in microseconds
+#define DHT11_WAIT_20_US_INTERVAL (const uint32_t)20      // in microseconds
+#define DHT11_WAIT_30_US_INTERVAL (const uint32_t)30      // in microseconds
+#define DHT11_WAIT_NEXT_PACKET_US (const uint32_t)2000000 // in microseconds
 
 enum DHT11_State
 {
-    REQUEST_LOW,
-    REQUEST_WAIT_LOW,
-    REQUEST_WAIT_20_US,
-    RESPONSE_WAIT_START,
-    RESPONSE_WAIT_HIGH,
-    RESPONSE_WAIT_LOW,
-    DATA_READ_START,
-    DATA_WAIT_HIGH,
-    DATA_WAIT_30_US,
-    DATA_WAIT_LOW,
-    WAIT_NEXT_PACKET
+    DHT11_REQUEST_LOW,
+    DHT11_REQUEST_WAIT_LOW,
+    DHT11_REQUEST_WAIT_20_US,
+    DHT11_RESPONSE_WAIT_START,
+    DHT11_RESPONSE_WAIT_HIGH,
+    DHT11_RESPONSE_WAIT_LOW,
+    DHT11_DATA_READ_START,
+    DHT11_DATA_WAIT_HIGH,
+    DHT11_DATA_WAIT_30_US,
+    DHT11_DATA_WAIT_LOW,
+    DHT11_WAIT_NEXT_PACKET
 };
 
 class DHT11

@@ -24,7 +24,7 @@ DHT11::~DHT11()
 void DHT11::begin(void)
 {
     beginTime();
-    this->state = REQUEST_LOW;
+    this->state = DHT11_REQUEST_LOW;
 }
 
 /*!
@@ -34,37 +34,37 @@ void DHT11::run(void)
 {
     switch (this->state)
     {
-        case REQUEST_LOW:
+        case DHT11_REQUEST_LOW:
             requestLow();
             break;
-        case REQUEST_WAIT_LOW:
+        case DHT11_REQUEST_WAIT_LOW:
             waitLow();
             break;
-        case REQUEST_WAIT_20_US:
+        case DHT11_REQUEST_WAIT_20_US:
             wait20us();
             break;
-        case RESPONSE_WAIT_START:
+        case DHT11_RESPONSE_WAIT_START:
             waitStartResponse();
             break;
-        case RESPONSE_WAIT_HIGH:
+        case DHT11_RESPONSE_WAIT_HIGH:
             waitResponseHigh();
             break;
-        case RESPONSE_WAIT_LOW:
+        case DHT11_RESPONSE_WAIT_LOW:
             waitResponseLow();
             break;
-        case DATA_READ_START:
+        case DHT11_DATA_READ_START:
             startDataRead();
             break;
-        case DATA_WAIT_HIGH:
+        case DHT11_DATA_WAIT_HIGH:
             waitDataHigh();
             break;
-        case DATA_WAIT_30_US:
+        case DHT11_DATA_WAIT_30_US:
             waitData30us();
             break;
-        case DATA_WAIT_LOW:
+        case DHT11_DATA_WAIT_LOW:
             waitDataLow();
             break;
-        case WAIT_NEXT_PACKET:
+        case DHT11_WAIT_NEXT_PACKET:
             waitNextPacket();
             break;
     }
@@ -92,8 +92,8 @@ void DHT11::requestLow(void)
 {
     this->dhtGPIO->setMode(OUTPUT);
     this->dhtGPIO->write(LOW);
-    this->nextTime = getMicroseconds() + WAIT_LOW_INTERVAL;
-    this->state = REQUEST_WAIT_LOW;
+    this->nextTime = getMicroseconds() + DHT11_WAIT_LOW_INTERVAL;
+    this->state = DHT11_REQUEST_WAIT_LOW;
 }
 
 void DHT11::waitLow(void)
@@ -102,8 +102,8 @@ void DHT11::waitLow(void)
         return;
     
     this->dhtGPIO->write(HIGH);
-    this->nextTime = getMicroseconds() + WAIT_20_US_INTERVAL;
-    this->state = REQUEST_WAIT_20_US;
+    this->nextTime = getMicroseconds() + DHT11_WAIT_20_US_INTERVAL;
+    this->state = DHT11_REQUEST_WAIT_20_US;
 }
 
 void DHT11::wait20us(void)
@@ -112,7 +112,7 @@ void DHT11::wait20us(void)
         return;
 
     this->dhtGPIO->setMode(INPUT);
-    this->state = RESPONSE_WAIT_START;
+    this->state = DHT11_RESPONSE_WAIT_START;
 }
 
 void DHT11::waitStartResponse(void)
@@ -120,7 +120,7 @@ void DHT11::waitStartResponse(void)
     if (this->dhtGPIO->read())
         return;
     
-    this->state = RESPONSE_WAIT_HIGH;
+    this->state = DHT11_RESPONSE_WAIT_HIGH;
 }
 
 void DHT11::waitResponseHigh(void)
@@ -128,7 +128,7 @@ void DHT11::waitResponseHigh(void)
     if (!this->dhtGPIO->read())
         return;
     
-    this->state = RESPONSE_WAIT_LOW;
+    this->state = DHT11_RESPONSE_WAIT_LOW;
 }
 
 void DHT11::waitResponseLow(void)
@@ -136,7 +136,7 @@ void DHT11::waitResponseLow(void)
     if (this->dhtGPIO->read())
         return;
     
-    this->state = DATA_READ_START;
+    this->state = DHT11_DATA_READ_START;
 }
 
 void DHT11::startDataRead(void)
@@ -144,7 +144,7 @@ void DHT11::startDataRead(void)
     this->data = 0;
     this->bitIndex = 0;
     this->byteIndex = 0;
-    this->state = DATA_WAIT_HIGH;
+    this->state = DHT11_DATA_WAIT_HIGH;
 }
 
 void DHT11::waitDataHigh(void)
@@ -152,8 +152,8 @@ void DHT11::waitDataHigh(void)
     if (!this->dhtGPIO->read())
         return;
     
-    this->nextTime = getMicroseconds() + WAIT_30_US_INTERVAL;
-    this->state = DATA_WAIT_30_US;
+    this->nextTime = getMicroseconds() + DHT11_WAIT_30_US_INTERVAL;
+    this->state = DHT11_DATA_WAIT_30_US;
 }
 
 void DHT11::waitData30us(void)
@@ -167,7 +167,7 @@ void DHT11::waitData30us(void)
     else
         this->data = (this->data << 1);
 
-    this->state = DATA_WAIT_LOW;
+    this->state = DHT11_DATA_WAIT_LOW;
 }
 
 void DHT11::waitDataLow(void)
@@ -193,15 +193,15 @@ void DHT11::waitDataLow(void)
                 this->humidity = (float)I_RH + (float)D_RH / 10;
                 this->temperature = (float)I_Temp + (float)D_Temp / 10;
             }
-            this->nextTime = getMicroseconds() + WAIT_NEXT_PACKET_US;
-            this->state = WAIT_NEXT_PACKET;
+            this->nextTime = getMicroseconds() + DHT11_WAIT_NEXT_PACKET_US;
+            this->state = DHT11_WAIT_NEXT_PACKET;
             return;
         }
         this->data = 0;
         this->bitIndex = 0;
     }
 
-    this->state = DATA_WAIT_HIGH;
+    this->state = DHT11_DATA_WAIT_HIGH;
 }
 
 void DHT11::waitNextPacket(void)
@@ -209,5 +209,5 @@ void DHT11::waitNextPacket(void)
     if (getMicroseconds() < this->nextTime)
         return;
 
-    this->state = REQUEST_LOW;
+    this->state = DHT11_REQUEST_LOW;
 }
